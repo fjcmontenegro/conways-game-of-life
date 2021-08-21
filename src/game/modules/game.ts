@@ -53,6 +53,17 @@ export class Game {
     this.MAX_CELL_X = Math.floor(this.canvas.width / CELL_SIZE)
     this.MAX_CELL_Y = Math.floor(this.canvas.height / CELL_SIZE)
     this.container = container
+
+    // copy current
+    const newGrid: Grid = new Grid(this.MAX_CELL_X, this.MAX_CELL_Y)
+    for (const x in this.map.cells) {
+      for (const y in this.map.cells[x]) {
+        if (parseInt(x) < this.MAX_CELL_X && parseInt(y) < this.MAX_CELL_Y) {
+          newGrid.cells[x][y] = this.map.cells[x][y]
+        }
+      }
+    }
+    this.map = newGrid
   }
 
   init(): void {
@@ -107,9 +118,19 @@ export class Game {
     const cellY = Math.floor(mouseY / CELL_SIZE)
     const coord = `${cellX},${cellY}`
 
-    if (!this.updatedCells.includes(coord)) {
-      this.map.cells[cellX][cellY] = this.map.cells[cellX][cellY] === 1 ? 0 : 1
-      this.updatedCells.push(coord)
+    // if we don't check we can have a rounding error and try to select a cell
+    // that doesn't exist
+    if (
+      cellX >= 0 &&
+      cellX < this.MAX_CELL_X &&
+      cellY >= 0 &&
+      cellY < this.MAX_CELL_Y
+    ) {
+      if (!this.updatedCells.includes(coord)) {
+        this.map.cells[cellX][cellY] =
+          this.map.cells[cellX][cellY] === 1 ? 0 : 1
+        this.updatedCells.push(coord)
+      }
     }
   }
 
