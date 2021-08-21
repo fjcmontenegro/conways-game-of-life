@@ -1,7 +1,15 @@
 import React from 'react'
 
-const Info = (): React.ReactElement => {
-  return <div style={style}>info</div>
+interface Props {
+  onClick: () => void
+}
+
+const Info = ({ onClick }: Props): React.ReactElement => {
+  return (
+    <div style={style}>
+      <button onClick={onClick}>asfsaf</button>
+    </div>
+  )
 }
 
 const style: React.CSSProperties = {

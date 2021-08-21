@@ -11,7 +11,7 @@ export class Game {
   context: CanvasRenderingContext2D | null
   map: Grid
 
-  playing: boolean
+  isPlaying: boolean
   mousePos: Point
   isUserDrawing: boolean
   updatedCells: string[]
@@ -35,10 +35,10 @@ export class Game {
     this.context = this.canvas.getContext('2d')
     this.map = new Grid(this.MAX_CELL_X, this.MAX_CELL_Y)
 
-    this.playing = false
     this.mousePos = { x: 0, y: 0 }
-    this.isUserDrawing = false
     this.updatedCells = []
+    this.isUserDrawing = false
+    this.isPlaying = false
 
     this.lastFrame = 0
   }
@@ -76,6 +76,10 @@ export class Game {
         this.map.import(formation1)
       }
     })
+  }
+
+  setPlay(play: boolean) {
+    this.isPlaying = play
   }
 
   updatePoint(mouseX: number, mouseY: number): void {
@@ -143,6 +147,6 @@ export class Game {
   mainLoop(t?: number): void {
     this.animationFrame = window.requestAnimationFrame(this.mainLoop.bind(this))
     this.render()
-    this.playing && this.update(t ?? 0)
+    this.isPlaying && this.update(t ?? 0)
   }
 }

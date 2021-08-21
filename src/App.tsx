@@ -1,12 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Canvas from './components/Canvas'
 import Info from './components/Info'
 
 export default function App(): React.ReactElement {
+  const [isPlaying, setIsPlaying] = useState(false)
+
+  const handleClick = () => {
+    setIsPlaying((p) => !p)
+  }
+
   return (
     <div style={style}>
-      <Info />
-      <Canvas />
+      <Info onClick={handleClick} />
+      <Canvas isPlaying={isPlaying} />
     </div>
   )
 }

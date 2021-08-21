@@ -1,10 +1,22 @@
 import React, { useEffect, useRef } from 'react'
 import { Game } from '../game/modules/game'
 
-const Canvas = (): React.ReactElement => {
+interface Props {
+  isPlaying: boolean
+}
+
+const Canvas = ({ isPlaying }: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
+
+  console.log('rendered', isPlaying)
+
+  useEffect(() => {
+    if (gameRef.current) {
+      gameRef.current.setPlay(isPlaying)
+    }
+  }, [isPlaying])
 
   useEffect(() => {
     const canvas = canvasRef.current
