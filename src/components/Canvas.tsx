@@ -17,7 +17,11 @@ const Canvas = (props: React.ComponentProps<'canvas'>): React.ReactElement => {
       }
     }
   }, [])
-  return <canvas ref={ref} {...props} />
+  return <canvas ref={ref} style={style} {...props} />
+}
+
+const style: React.CSSProperties = {
+  flex: 5,
 }
 
 export default Canvas

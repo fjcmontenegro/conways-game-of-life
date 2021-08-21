@@ -1,12 +1,21 @@
 import React from 'react'
 import Canvas from './components/Canvas'
+import Info from './components/Info'
 
-function App(): React.ReactElement {
+export default function App(): React.ReactElement {
   return (
-    <div className="App">
+    <div style={style}>
+      <Info />
       <Canvas />
     </div>
   )
 }
 
-export default App
+const style: React.CSSProperties = {
+  display: 'flex',
+  margin: 0,
+  padding: 0,
+  height: '100%',
+  width: '100%',
+  backgroundColor: 'aquamarine',
+}
