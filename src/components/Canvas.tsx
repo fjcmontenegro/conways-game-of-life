@@ -2,11 +2,12 @@ import React, { useEffect, useRef } from 'react'
 import { Game } from '../game/modules/game'
 
 interface Props {
+  fadeRate: number
   fps: number
   isPlaying: boolean
 }
 
-const Canvas = ({ fps, isPlaying }: Props): React.ReactElement => {
+const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
@@ -24,6 +25,12 @@ const Canvas = ({ fps, isPlaying }: Props): React.ReactElement => {
       gameRef.current.setFps(fps)
     }
   }, [fps])
+
+  useEffect(() => {
+    if (gameRef.current) {
+      gameRef.current.setFadeRate(fadeRate)
+    }
+  }, [fadeRate])
 
   useEffect(() => {
     const canvas = canvasRef.current

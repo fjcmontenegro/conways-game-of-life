@@ -1,2 +1,2 @@
-export const FPS = 20
-export const FADE_RATE = 0.05
+export const INITIAL_FPS = 10
+export const INITIAL_FADE_RATE = 0.25

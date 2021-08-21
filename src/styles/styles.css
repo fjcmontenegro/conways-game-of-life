@@ -1,3 +1,10 @@
+.info-container {
+  flex: 1;
+  min-width: 200px;
+  background-color: rgba(148, 210, 189, 1);
+  overflow: auto;
+}
+
 h1 {
   text-align: center;
 }
@@ -34,6 +41,7 @@ button:disabled {
   width: 100%;
 }
 
+.fade-controls button,
 .fps-controls button {
   width: 50%;
 }

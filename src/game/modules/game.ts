@@ -1,4 +1,4 @@
-import { FADE_RATE } from '../constants/animation'
+import { INITIAL_FADE_RATE, INITIAL_FPS } from '../constants/animation'
 import { CELL_SIZE } from '../constants/sizes'
 import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
@@ -22,7 +22,7 @@ export class Game {
   MAX_CELL_X: number
   MAX_CELL_Y: number
   fps: number
-  // playBtn: HTMLButtonElement
+  fadeRate: number
 
   constructor(canvas: HTMLCanvasElement, container: HTMLDivElement) {
     this.canvas = canvas
@@ -42,7 +42,8 @@ export class Game {
     this.isPlaying = false
 
     this.lastFrame = 0
-    this.fps = 20
+    this.fps = INITIAL_FPS
+    this.fadeRate = INITIAL_FADE_RATE
   }
 
   resize(container: HTMLDivElement) {
@@ -97,6 +98,10 @@ export class Game {
     this.fps = fps
   }
 
+  setFadeRate(fadeRate: number) {
+    this.fadeRate = fadeRate
+  }
+
   updatePoint(mouseX: number, mouseY: number): void {
     const cellX = Math.floor(mouseX / CELL_SIZE)
     const cellY = Math.floor(mouseY / CELL_SIZE)
@@ -130,7 +135,7 @@ export class Game {
           newMap.cells[i][j] = 1
         } else {
           newMap.cells[i][j] =
-            this.map.cells[i][j] > 0 ? this.map.cells[i][j] - FADE_RATE : 0
+            this.map.cells[i][j] > 0 ? this.map.cells[i][j] - this.fadeRate : 0
         }
         // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
       }

@@ -1,23 +1,34 @@
 import React from 'react'
-import { HIGHEST_FPS, LOWEST_FPS } from '../App'
+import {
+  HIGHEST_FADE_RATE,
+  HIGHEST_FPS,
+  LOWEST_FADE_RATE,
+  LOWEST_FPS,
+} from '../App'
 
 interface Props {
   isPlaying: boolean
   onPlay: () => void
+  onFadeRateUp: () => void
+  onFadeRateDown: () => void
   onSpeedUp: () => void
   onSpeedDown: () => void
   fps: number
+  fadeRate: number
 }
 
 const Info = ({
   isPlaying,
   onPlay,
+  onFadeRateUp,
+  onFadeRateDown,
   onSpeedDown,
   onSpeedUp,
   fps,
+  fadeRate,
 }: Props): React.ReactElement => {
   return (
-    <div style={styles.container}>
+    <div className="info-container">
       <div>
         <h1>Conway&apos;s Game of Life</h1>
 
@@ -26,6 +37,7 @@ const Info = ({
           you&apos;re ready to start the simulation.
         </p>
         <p>Current FPS: {fps}</p>
+        <p>Current Fade Rate: {fadeRate.toFixed(2)}</p>
 
         {/* <p>Rules:</p>
         <ol>
@@ -59,16 +71,19 @@ const Info = ({
           + Speed
         </button>
       </div>
+      <div className="fade-controls">
+        <button
+          onClick={onFadeRateDown}
+          disabled={fadeRate <= LOWEST_FADE_RATE}
+        >
+          - Fade Rate
+        </button>
+        <button onClick={onFadeRateUp} disabled={fadeRate >= HIGHEST_FADE_RATE}>
+          + Fade Rate
+        </button>
+      </div>
     </div>
   )
-}
-
-const styles: Record<string, React.CSSProperties> = {
-  container: {
-    flex: 1,
-    backgroundColor: 'rgba(148, 210, 189, 1)',
-    overflow: 'auto',
-  },
 }
 
 export default Info
