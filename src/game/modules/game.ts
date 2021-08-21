@@ -43,6 +43,15 @@ export class Game {
     this.lastFrame = 0
   }
 
+  resize(container: HTMLDivElement) {
+    this.canvas.height = container.clientHeight
+    this.canvas.width = container.clientWidth
+
+    this.MAX_CELL_X = Math.floor(this.canvas.width / CELL_SIZE)
+    this.MAX_CELL_Y = Math.floor(this.canvas.height / CELL_SIZE)
+    this.container = container
+  }
+
   init(): void {
     this.container.addEventListener(
       'mousemove',

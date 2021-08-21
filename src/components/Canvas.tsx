@@ -21,8 +21,15 @@ const Canvas = ({ isPlaying }: Props): React.ReactElement => {
   useEffect(() => {
     const canvas = canvasRef.current
     const container = containerRef.current
+
+    let resizeCallback: (() => void) | null = null
+
     if (canvas && container) {
       if (gameRef) {
+        resizeCallback = () => {
+          gameRef.current?.resize(container)
+        }
+        window.addEventListener('resize', resizeCallback)
         gameRef.current = new Game(canvas, container)
         gameRef.current.init()
         gameRef.current.mainLoop()
@@ -32,6 +39,7 @@ const Canvas = ({ isPlaying }: Props): React.ReactElement => {
     return () => {
       gameRef?.current?.animationFrame &&
         window.cancelAnimationFrame(gameRef.current.animationFrame)
+      resizeCallback && window.removeEventListener('resize', resizeCallback)
     }
   }, [canvasRef, containerRef])
   return (
