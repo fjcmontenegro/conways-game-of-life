@@ -1,20 +1,23 @@
-import { MAX_CELL_X, MAX_CELL_Y } from '../constants/sizes'
 import { Map2D, Point } from '../types/geometry'
 
 export class Grid {
   cells: Map2D
+  height: number
+  width: number
 
-  constructor() {
+  constructor(width: number, height: number) {
+    this.height = height
+    this.width = width
     this.cells = {}
-    for (let i = 0; i < MAX_CELL_X; i++) {
+    for (let i = 0; i < this.width; i++) {
       this.cells[i] = {}
-      for (let j = 0; j < MAX_CELL_Y; j++) {
+      for (let j = 0; j < this.height; j++) {
         this.cells[i][j] = 0
       }
     }
   }
 
-  export() {
+  export(): string {
     const alive = []
     for (const x in this.cells) {
       for (const y in this.cells[x]) {
@@ -26,7 +29,7 @@ export class Grid {
     return JSON.stringify(alive)
   }
 
-  import(alive: string[][]) {
+  import(alive: string[][]): void {
     console.log(alive)
     alive.map((cell) => {
       const x = parseInt(cell[0])
@@ -35,7 +38,7 @@ export class Grid {
     })
   }
 
-  getAliveNeighboors(p: Point) {
+  getAliveNeighboors(p: Point): number {
     const neighboors = []
 
     // has west
@@ -46,7 +49,7 @@ export class Grid {
     }
 
     // has east
-    if (p.x < MAX_CELL_X - 1) {
+    if (p.x < this.width - 1) {
       neighboors.push(this.cells[p.x + 1][p.y - 1]) // NorthEast
       neighboors.push(this.cells[p.x + 1][p.y]) // East
       neighboors.push(this.cells[p.x + 1][p.y + 1]) // SouthEast

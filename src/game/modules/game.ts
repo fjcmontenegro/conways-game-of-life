@@ -1,13 +1,13 @@
 import { FPS, FADE_RATE } from '../constants/animation'
-import { CELL_SIZE, MAX_CELL_X, MAX_CELL_Y } from '../constants/sizes'
+import { CELL_SIZE } from '../constants/sizes'
 import { Point } from '../types/geometry'
-import { createButtons } from '../util/buttons'
-import { createCanvas, clearCanvas } from '../util/canvas'
+import { clearCanvas } from '../util/canvas'
 import { Grid } from './grid'
 import formation1 from '../data/formation1.json'
 
 export class Game {
   canvas: HTMLCanvasElement
+  container: HTMLDivElement
   context: CanvasRenderingContext2D | null
   map: Grid
 
@@ -17,13 +17,23 @@ export class Game {
   updatedCells: string[]
 
   lastFrame: number
+  animationFrame?: number
 
-  playBtn: HTMLButtonElement
+  MAX_CELL_X: number
+  MAX_CELL_Y: number
+  // playBtn: HTMLButtonElement
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, container: HTMLDivElement) {
     this.canvas = canvas
+    this.canvas.height = container.clientHeight
+    this.canvas.width = container.clientWidth
+
+    this.MAX_CELL_X = Math.floor(this.canvas.width / CELL_SIZE)
+    this.MAX_CELL_Y = Math.floor(this.canvas.height / CELL_SIZE)
+    this.container = container
+
     this.context = this.canvas.getContext('2d')
-    this.map = new Grid()
+    this.map = new Grid(this.MAX_CELL_X, this.MAX_CELL_Y)
 
     this.playing = false
     this.mousePos = { x: 0, y: 0 }
@@ -31,32 +41,29 @@ export class Game {
     this.updatedCells = []
 
     this.lastFrame = 0
-
-    // setup button with a callback
-    this.playBtn = createButtons(() => {
-      this.playing = !this.playing
-      this.playBtn.innerHTML = this.playing ? 'Pause' : 'Play'
-    })
   }
 
-  init() {
-    this.canvas.addEventListener('mousemove', ({ buttons, pageX, pageY }) => {
-      this.mousePos.x = pageX
-      this.mousePos.y = pageY
+  init(): void {
+    this.container.addEventListener(
+      'mousemove',
+      ({ buttons, offsetX, offsetY }) => {
+        this.mousePos.x = offsetX
+        this.mousePos.y = offsetY
 
-      if (this.isUserDrawing && buttons === 1) {
-        this.updatePoint(this.mousePos.x, this.mousePos.y)
-      }
-    })
+        if (this.isUserDrawing && buttons === 1) {
+          this.updatePoint(this.mousePos.x, this.mousePos.y)
+        }
+      },
+    )
 
-    this.canvas.addEventListener('mousedown', ({ button }) => {
+    this.container.addEventListener('mousedown', ({ button }) => {
       if (button === 0) {
         this.isUserDrawing = true
         this.updatePoint(this.mousePos.x, this.mousePos.y)
       }
     })
 
-    this.canvas.addEventListener('mouseup', ({ button }) => {
+    this.container.addEventListener('mouseup', ({ button }) => {
       if (button === 0) {
         this.isUserDrawing = false
         this.updatedCells = []
@@ -71,7 +78,7 @@ export class Game {
     })
   }
 
-  updatePoint(mouseX: number, mouseY: number) {
+  updatePoint(mouseX: number, mouseY: number): void {
     const cellX = Math.floor(mouseX / CELL_SIZE)
     const cellY = Math.floor(mouseY / CELL_SIZE)
     const coord = `${cellX},${cellY}`
@@ -82,16 +89,16 @@ export class Game {
     }
   }
 
-  update(time: number) {
+  update(time: number): void {
     if (time - this.lastFrame < 1000 / FPS) {
       return
     }
 
     this.lastFrame = time
-    const newMap = new Grid()
+    const newMap = new Grid(this.MAX_CELL_X, this.MAX_CELL_Y)
 
-    for (let i = 0; i < MAX_CELL_X; i++) {
-      for (let j = 0; j < MAX_CELL_Y; j++) {
+    for (let i = 0; i < this.MAX_CELL_X; i++) {
+      for (let j = 0; j < this.MAX_CELL_Y; j++) {
         const aliveCount = this.map.getAliveNeighboors({ x: i, y: j })
 
         // Any live cell with two or three live neighbours survives.
@@ -113,26 +120,28 @@ export class Game {
     this.map = newMap
   }
 
-  render() {
+  render(): void {
     if (!this.context) return
 
-    clearCanvas(this.context)
+    clearCanvas(this.context, this.canvas.width, this.canvas.height)
 
-    for (let i = 0; i < MAX_CELL_X; i++) {
-      for (let j = 0; j < MAX_CELL_Y; j++) {
-        this.context.fillStyle = `rgba(148, 210, 189, ${this.map.cells[i][j]})`
-        this.context.fillRect(
-          i * CELL_SIZE,
-          j * CELL_SIZE,
-          CELL_SIZE,
-          CELL_SIZE,
-        )
+    for (let i = 0; i < this.MAX_CELL_X; i++) {
+      for (let j = 0; j < this.MAX_CELL_Y; j++) {
+        if (this.map.cells[i][j] > 0) {
+          this.context.fillStyle = `rgba(148, 210, 189, ${this.map.cells[i][j]})`
+          this.context.fillRect(
+            i * CELL_SIZE,
+            j * CELL_SIZE,
+            CELL_SIZE,
+            CELL_SIZE,
+          )
+        }
       }
     }
   }
 
-  mainLoop(t?: number) {
-    window.requestAnimationFrame(this.mainLoop.bind(this))
+  mainLoop(t?: number): void {
+    this.animationFrame = window.requestAnimationFrame(this.mainLoop.bind(this))
     this.render()
     this.playing && this.update(t ?? 0)
   }

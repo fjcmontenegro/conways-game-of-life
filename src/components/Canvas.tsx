@@ -1,27 +1,42 @@
 import React, { useEffect, useRef } from 'react'
+import { Game } from '../game/modules/game'
 
-const Canvas = (props: React.ComponentProps<'canvas'>): React.ReactElement => {
-  const ref = useRef<HTMLCanvasElement>(null)
-
-  console.log('canvas rendered')
+const Canvas = (): React.ReactElement => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const gameRef = useRef<Game>()
 
   useEffect(() => {
-    const canvas = ref.current
-    if (canvas) {
-      const context = canvas.getContext('2d')
-
-      if (context) {
-        //Our first draw
-        context.fillStyle = '#000000'
-        context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+    const canvas = canvasRef.current
+    const container = containerRef.current
+    if (canvas && container) {
+      if (gameRef) {
+        gameRef.current = new Game(canvas, container)
+        gameRef.current.init()
+        gameRef.current.mainLoop()
       }
     }
-  }, [])
-  return <canvas ref={ref} style={style} {...props} />
+
+    return () => {
+      gameRef?.current?.animationFrame &&
+        window.cancelAnimationFrame(gameRef.current.animationFrame)
+    }
+  }, [canvasRef, containerRef])
+  return (
+    <div ref={containerRef} style={styles.container}>
+      <canvas ref={canvasRef} style={styles.canvas} />
+    </div>
+  )
 }
 
-const style: React.CSSProperties = {
-  flex: 5,
+const styles: Record<string, React.CSSProperties> = {
+  container: {
+    flex: 5,
+    // display: 'flex',
+  },
+  canvas: {
+    // flex: 1,
+  },
 }
 
 export default Canvas
