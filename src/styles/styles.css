@@ -1,0 +1,39 @@
+h1 {
+  text-align: center;
+}
+
+p {
+  padding: 0 1rem;
+}
+ol {
+  padding: 0 1rem 0 2rem;
+}
+
+button {
+  border: 2px solid rgba(148, 210, 189, 0.5);
+
+  background-color: #001219;
+  color: rgb(148, 210, 189);
+
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 2rem;
+
+  transition: all 0.2s;
+}
+
+button:active {
+  color: #001219;
+  background-color: rgb(148, 210, 189);
+}
+
+button:disabled {
+  background-color: #00121988;
+}
+.play-control button {
+  width: 100%;
+}
+
+.fps-controls button {
+  width: 50%;
+}

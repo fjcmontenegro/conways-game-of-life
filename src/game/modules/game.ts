@@ -1,4 +1,4 @@
-import { FPS, FADE_RATE } from '../constants/animation'
+import { FADE_RATE } from '../constants/animation'
 import { CELL_SIZE } from '../constants/sizes'
 import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
@@ -21,6 +21,7 @@ export class Game {
 
   MAX_CELL_X: number
   MAX_CELL_Y: number
+  fps: number
   // playBtn: HTMLButtonElement
 
   constructor(canvas: HTMLCanvasElement, container: HTMLDivElement) {
@@ -41,6 +42,7 @@ export class Game {
     this.isPlaying = false
 
     this.lastFrame = 0
+    this.fps = 20
   }
 
   resize(container: HTMLDivElement) {
@@ -91,6 +93,10 @@ export class Game {
     this.isPlaying = play
   }
 
+  setFps(fps: number) {
+    this.fps = fps
+  }
+
   updatePoint(mouseX: number, mouseY: number): void {
     const cellX = Math.floor(mouseX / CELL_SIZE)
     const cellY = Math.floor(mouseY / CELL_SIZE)
@@ -103,7 +109,7 @@ export class Game {
   }
 
   update(time: number): void {
-    if (time - this.lastFrame < 1000 / FPS) {
+    if (time - this.lastFrame < 1000 / this.fps) {
       return
     }
 

@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from 'react'
 import { Game } from '../game/modules/game'
 
 interface Props {
+  fps: number
   isPlaying: boolean
 }
 
-const Canvas = ({ isPlaying }: Props): React.ReactElement => {
+const Canvas = ({ fps, isPlaying }: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
@@ -17,6 +18,12 @@ const Canvas = ({ isPlaying }: Props): React.ReactElement => {
       gameRef.current.setPlay(isPlaying)
     }
   }, [isPlaying])
+
+  useEffect(() => {
+    if (gameRef.current) {
+      gameRef.current.setFps(fps)
+    }
+  }, [fps])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -44,7 +51,7 @@ const Canvas = ({ isPlaying }: Props): React.ReactElement => {
   }, [canvasRef, containerRef])
   return (
     <div ref={containerRef} style={styles.container}>
-      <canvas ref={canvasRef} style={styles.canvas} />
+      <canvas ref={canvasRef} />
     </div>
   )
 }
@@ -52,10 +59,6 @@ const Canvas = ({ isPlaying }: Props): React.ReactElement => {
 const styles: Record<string, React.CSSProperties> = {
   container: {
     flex: 5,
-    // display: 'flex',
-  },
-  canvas: {
-    // flex: 1,
   },
 }
 
