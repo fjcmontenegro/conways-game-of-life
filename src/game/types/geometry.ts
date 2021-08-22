@@ -3,7 +3,7 @@ export interface Point {
   y: number
 }
 
-export type Map2D = {
+export type Grid2D = {
   [x: number]: {
     [y: number]: number
   }

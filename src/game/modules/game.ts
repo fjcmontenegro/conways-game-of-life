@@ -3,13 +3,13 @@ import { CELL_SIZE } from '../constants/sizes'
 import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import formation1 from '../data/formation1.json'
-import { DynamicGrid } from './dynamic-grid'
+import { Grid } from './grid'
 
-export class DynamicGame {
+export class Game {
   canvas: HTMLCanvasElement
   container: HTMLDivElement
   context: CanvasRenderingContext2D | null
-  map: DynamicGrid
+  grid: Grid
 
   isPlaying: boolean
   mousePos: Point
@@ -36,7 +36,7 @@ export class DynamicGame {
     this.container = container
 
     this.context = this.canvas.getContext('2d')
-    this.map = new DynamicGrid()
+    this.grid = new Grid()
 
     this.mousePos = { x: 0, y: 0 }
     this.updatedCells = []
@@ -102,8 +102,8 @@ export class DynamicGame {
     const coord = `${cellX},${cellY}`
 
     if (!this.updatedCells.includes(coord)) {
-      const cellVal = this.map.get(cellX, cellY)
-      this.map.set(cellX, cellY, cellVal === 1 ? 0 : 1)
+      const cellVal = this.grid.get(cellX, cellY)
+      this.grid.set(cellX, cellY, cellVal === 1 ? 0 : 1)
       this.updatedCells.push(coord)
     }
   }
@@ -114,16 +114,16 @@ export class DynamicGame {
     }
 
     // if there are no cells
-    if (!Object.keys(this.map.cells).length) {
+    if (!Object.keys(this.grid.cells).length) {
       return
     }
 
     this.lastFrame = time
-    const newMap = new DynamicGrid()
+    const newGrid = new Grid()
 
-    // evaluate entire existing map to generate newMap
-    for (const keyX in this.map.cells) {
-      for (const keyY in this.map.cells[keyX]) {
+    // evaluate entire existing map to generate newGrid
+    for (const keyX in this.grid.cells) {
+      for (const keyY in this.grid.cells[keyX]) {
         const [x, y] = [parseInt(keyX), parseInt(keyY)]
 
         // if the cell is outside the canvas, ignore this cell
@@ -131,33 +131,33 @@ export class DynamicGame {
           break
         }
 
-        const neighboors = this.map.getNeighbors(x, y)
+        const neighboors = this.grid.getNeighbors(x, y)
 
         // if there are no neighbors, ignore this cell
         if (!neighboors.length) {
           break
         }
 
-        const count = this.map.countAliveNeighbors(neighboors)
+        const count = this.grid.countAliveNeighbors(neighboors)
 
         // Any live cell with two or three live neighbours survives.
-        const rule1 = this.map.get(x, y) === 1 && (count === 2 || count === 3)
+        const rule1 = this.grid.get(x, y) === 1 && (count === 2 || count === 3)
         // Any dead cell with three live neighbours becomes a live cell
-        const rule2 = this.map.get(x, y) !== 1 && count === 3
+        const rule2 = this.grid.get(x, y) !== 1 && count === 3
 
         if (rule1 || rule2) {
-          newMap.set(x, y, 1)
+          newGrid.set(x, y, 1)
         } else {
-          const cellOldValue = this.map.get(x, y)
+          const cellOldValue = this.grid.get(x, y)
           if (cellOldValue && cellOldValue > 0) {
-            newMap.set(x, y, cellOldValue - this.fadeRate)
+            newGrid.set(x, y, cellOldValue - this.fadeRate)
           }
         }
         // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
       }
     }
 
-    this.map = newMap
+    this.grid = newGrid
   }
 
   isPointInsideCanvas(x: number, y: number): boolean {
@@ -169,10 +169,10 @@ export class DynamicGame {
 
     clearCanvas(this.context, this.canvas.width, this.canvas.height)
 
-    for (const keyX in this.map.cells) {
-      for (const keyY in this.map.cells[keyX]) {
+    for (const keyX in this.grid.cells) {
+      for (const keyY in this.grid.cells[keyX]) {
         const [x, y] = [parseInt(keyX), parseInt(keyY)]
-        const cellValue = this.map.get(x, y)
+        const cellValue = this.grid.get(x, y)
 
         if (cellValue && cellValue > 0) {
           this.context.fillStyle = `rgba(148, 210, 189, ${cellValue})`

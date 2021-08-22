@@ -1,12 +1,12 @@
-import { Map2D, Point } from '../types/geometry'
+import { Grid2D, Point } from '../types/geometry'
 
 /**
  * There's no recycling in this class. If you need to remove cells, create a new
  * map.
  * @todo make this class BE the cells, and not hold cells
  */
-export class DynamicGrid {
-  cells: Map2D
+export class Grid {
+  cells: Grid2D
 
   constructor() {
     this.cells = {}
