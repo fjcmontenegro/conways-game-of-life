@@ -82,4 +82,12 @@ export class Grid {
   countAliveNeighbors(neighbors: number[]): number {
     return neighbors.filter((cell) => cell === 1).length
   }
+
+  export() {
+    return JSON.stringify(this.cells)
+  }
+
+  import(jsonGrid: Grid2D) {
+    this.cells = jsonGrid
+  }
 }

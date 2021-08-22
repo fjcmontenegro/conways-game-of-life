@@ -1,6 +1,6 @@
 import { INITIAL_FADE_RATE, INITIAL_FPS } from '../constants/animation'
 import { CELL_SIZE } from '../constants/sizes'
-import { Point } from '../types/geometry'
+import { Grid2D, Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import formation1 from '../data/formation1.json'
 import { Grid } from './grid'
@@ -80,6 +80,14 @@ export class Game {
       if (button === 0) {
         this.isUserDrawing = false
         this.updatedCells = []
+      }
+    })
+
+    window.addEventListener('keypress', ({ key }) => {
+      if (key === 'e') {
+        console.log(this.grid.export())
+      } else if (key === 'i') {
+        this.grid.import(formation1 as Grid2D)
       }
     })
   }
