@@ -25,6 +25,8 @@ export class DynamicGame {
   fps: number
   fadeRate: number
 
+  lastLoopPerformance: number[]
+
   constructor(canvas: HTMLCanvasElement, container: HTMLDivElement) {
     this.canvas = canvas
     this.canvas.height = container.clientHeight
@@ -46,6 +48,8 @@ export class DynamicGame {
     this.lastFrame = 0
     this.fps = INITIAL_FPS
     this.fadeRate = INITIAL_FADE_RATE
+
+    this.lastLoopPerformance = []
   }
 
   resize(container: HTMLDivElement): void {
@@ -131,10 +135,10 @@ export class DynamicGame {
     if (!this.updatedCells.includes(coord)) {
       //     this.map.cells[cellX][cellY] =
       //       this.map.cells[cellX][cellY] === 1 ? 0 : 1
-      //     this.updatedCells.push(coord)
       //   }
       const cellVal = this.map.get(cellX, cellY)
       this.map.set(cellX, cellY, cellVal === 1 ? 0 : 1)
+      this.updatedCells.push(coord)
     }
   }
 
@@ -234,7 +238,7 @@ export class DynamicGame {
             CELL_SIZE,
           )
         } else {
-          this.context.fillStyle = 'red'
+          this.context.fillStyle = 'rgba(148, 210, 189, 0.1)'
           this.context.fillRect(
             x * CELL_SIZE,
             y * CELL_SIZE,
@@ -261,8 +265,21 @@ export class DynamicGame {
   }
 
   mainLoop(t?: number): void {
+    const t0 = performance.now()
+
     this.animationFrame = window.requestAnimationFrame(this.mainLoop.bind(this))
     this.render()
     this.isPlaying && this.update(t ?? 0)
+
+    if (this.lastLoopPerformance.length > 50) {
+      this.lastLoopPerformance = this.lastLoopPerformance.splice(1)
+    }
+
+    const dt = Math.floor((performance.now() - t0) * 1000)
+    this.lastLoopPerformance.push(dt)
+    console.log(
+      this.lastLoopPerformance.reduce((acc, curr) => acc + curr) /
+        this.lastLoopPerformance.length,
+    )
   }
 }
