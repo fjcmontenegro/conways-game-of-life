@@ -101,15 +101,15 @@ export class Game {
     })
   }
 
-  setPlay(play: boolean) {
+  setPlay(play: boolean): void {
     this.isPlaying = play
   }
 
-  setFps(fps: number) {
+  setFps(fps: number): void {
     this.fps = fps
   }
 
-  setFadeRate(fadeRate: number) {
+  setFadeRate(fadeRate: number): void {
     this.fadeRate = fadeRate
   }
 

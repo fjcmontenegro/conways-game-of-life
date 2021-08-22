@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { DynamicGame } from '../game/modules/dynamic-game'
 import { Game } from '../game/modules/game'
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
 const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
-  const gameRef = useRef<Game>()
+  const gameRef = useRef<DynamicGame>()
 
   console.log('rendered', isPlaying)
 
@@ -44,7 +45,7 @@ const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
           gameRef.current?.resize(container)
         }
         window.addEventListener('resize', resizeCallback)
-        gameRef.current = new Game(canvas, container)
+        gameRef.current = new DynamicGame(canvas, container)
         gameRef.current.init()
         gameRef.current.mainLoop()
       }
