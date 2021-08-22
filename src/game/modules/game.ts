@@ -9,6 +9,7 @@ type GameConstructorOptions = {
   drawDead?: boolean
   fps?: number
   fadeRate?: number
+  immortality?: boolean
 }
 
 export class Game {
@@ -30,6 +31,7 @@ export class Game {
 
   lastLoopPerformance: number[]
   drawDead: boolean
+  immortality: boolean
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -55,6 +57,7 @@ export class Game {
     this.fps = options?.fps ?? DEFAULT_FPS
     this.fadeRate = options?.fadeRate ?? DEFAULT_FADE_RATE
     this.drawDead = options?.drawDead ?? true
+    this.immortality = options?.immortality ?? false
   }
 
   resize(container: HTMLDivElement): void {
@@ -101,6 +104,10 @@ export class Game {
 
   setPlay(play: boolean): void {
     this.isPlaying = play
+  }
+
+  setImmortality(immortality: boolean): void {
+    this.immortality = immortality
   }
 
   updatePoint(mouseX: number, mouseY: number): void {
@@ -155,14 +162,20 @@ export class Game {
         if (rule1 || rule2) {
           newGrid.set(x, y, 1)
         } else {
+          // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
           const cellOldValue = this.grid.get(x, y)
+
           if (cellOldValue && cellOldValue > 0) {
-            // avoid rounding errors by limiting value to 0..1
-            const newValue = cellOldValue - this.fadeRate
-            newGrid.set(x, y, newValue < 0 ? 0 : newValue > 1 ? 1 : newValue)
+            if (this.immortality) {
+              newGrid.set(x, y, cellOldValue)
+            } else {
+              // take a bit of life away
+              const newValue = cellOldValue - this.fadeRate
+              // avoid rounding errors by limiting value to 0..1
+              newGrid.set(x, y, newValue < 0 ? 0 : newValue > 1 ? 1 : newValue)
+            }
           }
         }
-        // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
       }
     }
 

@@ -5,6 +5,7 @@ import './styles/styles.css'
 
 export default function App(): React.ReactElement {
   const [isPlaying, setIsPlaying] = useState(false)
+  const [immortality, setImmortality] = useState(false)
 
   const handleClick = () => {
     setIsPlaying((p) => !p)
@@ -12,9 +13,14 @@ export default function App(): React.ReactElement {
 
   return (
     <div style={style}>
-      <Info onPlay={handleClick} isPlaying={isPlaying} />
+      <Info
+        onPlay={handleClick}
+        immortality={immortality}
+        onToggleImmortality={() => setImmortality((im) => !im)}
+        isPlaying={isPlaying}
+      />
       <div className="canvas-area">
-        <div style={{ height: '50%', width: '50%' }}>
+        {/* <div style={{ height: '50%', width: '50%' }}>
           <Canvas isPlaying={isPlaying} fadeRate={1} drawDead={false} />
         </div>
         <div style={{ height: '50%', width: '50%' }}>
@@ -25,7 +31,12 @@ export default function App(): React.ReactElement {
         </div>
         <div style={{ height: '50%', width: '50%' }}>
           <Canvas isPlaying={isPlaying} fadeRate={0.05} />
-        </div>
+        </div> */}
+        <Canvas
+          isPlaying={isPlaying}
+          immortality={immortality}
+          fadeRate={0.01}
+        />
       </div>
     </div>
   )

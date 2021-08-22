@@ -5,6 +5,7 @@ interface Props {
   drawDead?: boolean
   fadeRate?: number
   fps?: number
+  immortality?: boolean
   isPlaying: boolean
 }
 
@@ -12,6 +13,7 @@ const Canvas = ({
   drawDead,
   fadeRate,
   fps,
+  immortality,
   isPlaying,
 }: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -23,6 +25,12 @@ const Canvas = ({
       gameRef.current.setPlay(isPlaying)
     }
   }, [isPlaying])
+
+  useEffect(() => {
+    if (gameRef.current && immortality !== undefined) {
+      gameRef.current.setImmortality(immortality)
+    }
+  }, [immortality])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -40,6 +48,7 @@ const Canvas = ({
           fadeRate: fadeRate,
           fps: fps,
           drawDead: drawDead,
+          immortality: immortality,
         })
         gameRef.current.init()
         gameRef.current.mainLoop()

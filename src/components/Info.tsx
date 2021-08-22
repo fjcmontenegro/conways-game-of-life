@@ -3,9 +3,16 @@ import React from 'react'
 interface Props {
   isPlaying: boolean
   onPlay: () => void
+  immortality: boolean
+  onToggleImmortality: () => void
 }
 
-const Info = ({ isPlaying, onPlay }: Props): React.ReactElement => {
+const Info = ({
+  isPlaying,
+  onPlay,
+  immortality,
+  onToggleImmortality,
+}: Props): React.ReactElement => {
   return (
     <div className="info-container">
       <div>
@@ -39,6 +46,11 @@ const Info = ({ isPlaying, onPlay }: Props): React.ReactElement => {
 
       <div className="play-control">
         <button onClick={onPlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+      </div>
+      <div className="play-control">
+        <button onClick={onToggleImmortality}>
+          {immortality ? 'Deactivate Immortality' : 'Activate Immortality'}
+        </button>
       </div>
     </div>
   )
