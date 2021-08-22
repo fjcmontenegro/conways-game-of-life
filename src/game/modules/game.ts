@@ -46,7 +46,7 @@ export class Game {
     this.fadeRate = INITIAL_FADE_RATE
   }
 
-  resize(container: HTMLDivElement) {
+  resize(container: HTMLDivElement): void {
     this.canvas.height = container.clientHeight
     this.canvas.width = container.clientWidth
 
