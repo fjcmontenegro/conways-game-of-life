@@ -13,7 +13,9 @@ export default function App(): React.ReactElement {
   return (
     <div style={style}>
       <Info onPlay={handleClick} isPlaying={isPlaying} />
-      <Canvas isPlaying={isPlaying} />
+      {/* canvas 1 */}
+      {/* <Canvas isPlaying={isPlaying} fadeRate={1} /> */}
+      <Canvas isPlaying={isPlaying} fadeRate={1} drawDead />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
 
 type GameConstructorOptions = {
+  drawDead?: boolean
   fps?: number
   fadeRate?: number
 }
@@ -24,8 +25,6 @@ export class Game {
   lastFrame: number
   animationFrame?: number
 
-  MAX_CELL_X: number
-  MAX_CELL_Y: number
   fps: number
   fadeRate: number
 
@@ -36,15 +35,12 @@ export class Game {
     container: HTMLDivElement,
     options?: GameConstructorOptions,
   ) {
+    this.container = container
     this.canvas = canvas
     this.canvas.height = container.clientHeight
     this.canvas.width = container.clientWidth
-
-    this.MAX_CELL_X = Math.floor(this.canvas.width / CELL_SIZE)
-    this.MAX_CELL_Y = Math.floor(this.canvas.height / CELL_SIZE)
-    this.container = container
-
     this.context = this.canvas.getContext('2d')
+
     this.grid = new Grid()
 
     this.mousePos = { x: 0, y: 0 }
@@ -53,10 +49,10 @@ export class Game {
     this.isPlaying = false
 
     this.lastFrame = 0
+    this.lastLoopPerformance = []
+
     this.fps = options?.fps ?? DEFAULT_FPS
     this.fadeRate = options?.fadeRate ?? DEFAULT_FADE_RATE
-
-    this.lastLoopPerformance = []
   }
 
   resize(container: HTMLDivElement): void {
@@ -103,14 +99,6 @@ export class Game {
 
   setPlay(play: boolean): void {
     this.isPlaying = play
-  }
-
-  setFps(fps: number): void {
-    this.fps = fps
-  }
-
-  setFadeRate(fadeRate: number): void {
-    this.fadeRate = fadeRate
   }
 
   updatePoint(mouseX: number, mouseY: number): void {
@@ -167,7 +155,9 @@ export class Game {
         } else {
           const cellOldValue = this.grid.get(x, y)
           if (cellOldValue && cellOldValue > 0) {
-            newGrid.set(x, y, cellOldValue - this.fadeRate)
+            // avoid rounding errors by limiting value to 0..1
+            const newValue = cellOldValue - this.fadeRate
+            newGrid.set(x, y, newValue < 0 ? 0 : newValue > 1 ? 1 : newValue)
           }
         }
         // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
@@ -200,7 +190,9 @@ export class Game {
             CELL_SIZE,
           )
         } else {
-          this.context.fillStyle = 'rgba(148, 210, 189, 0.1)'
+          this.context.fillStyle = `rgba(148, 210, 189, ${
+            this.fadeRate === 1 ? 0 : this.fadeRate / 2
+          })`
           this.context.fillRect(
             x * CELL_SIZE,
             y * CELL_SIZE,

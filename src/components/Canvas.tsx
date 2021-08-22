@@ -2,12 +2,18 @@ import React, { useEffect, useRef } from 'react'
 import { Game } from '../game/modules/game'
 
 interface Props {
+  drawDead?: boolean
   fadeRate?: number
   fps?: number
   isPlaying: boolean
 }
 
-const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
+const Canvas = ({
+  drawDead,
+  fadeRate,
+  fps,
+  isPlaying,
+}: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
@@ -35,6 +41,7 @@ const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
         gameRef.current = new Game(canvas, container, {
           fadeRate: fadeRate,
           fps: fps,
+          drawDead: drawDead,
         })
         gameRef.current.init()
         gameRef.current.mainLoop()
