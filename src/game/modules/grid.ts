@@ -83,11 +83,11 @@ export class Grid {
     return neighbors.filter((cell) => cell === 1).length
   }
 
-  export() {
+  export(): string {
     return JSON.stringify(this.cells)
   }
 
-  import(jsonGrid: Grid2D) {
+  import(jsonGrid: Grid2D): void {
     this.cells = jsonGrid
   }
 }

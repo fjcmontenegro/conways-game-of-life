@@ -1,9 +1,14 @@
-import { INITIAL_FADE_RATE, INITIAL_FPS } from '../constants/animation'
 import { CELL_SIZE } from '../constants/sizes'
 import { Grid2D, Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import formation1 from '../data/formation1.json'
 import { Grid } from './grid'
+import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
+
+type GameConstructorOptions = {
+  fps?: number
+  fadeRate?: number
+}
 
 export class Game {
   canvas: HTMLCanvasElement
@@ -26,7 +31,11 @@ export class Game {
 
   lastLoopPerformance: number[]
 
-  constructor(canvas: HTMLCanvasElement, container: HTMLDivElement) {
+  constructor(
+    canvas: HTMLCanvasElement,
+    container: HTMLDivElement,
+    options?: GameConstructorOptions,
+  ) {
     this.canvas = canvas
     this.canvas.height = container.clientHeight
     this.canvas.width = container.clientWidth
@@ -44,8 +53,8 @@ export class Game {
     this.isPlaying = false
 
     this.lastFrame = 0
-    this.fps = INITIAL_FPS
-    this.fadeRate = INITIAL_FADE_RATE
+    this.fps = options?.fps ?? DEFAULT_FPS
+    this.fadeRate = options?.fadeRate ?? DEFAULT_FADE_RATE
 
     this.lastLoopPerformance = []
   }

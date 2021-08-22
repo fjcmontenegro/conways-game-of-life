@@ -2,8 +2,8 @@ import React, { useEffect, useRef } from 'react'
 import { Game } from '../game/modules/game'
 
 interface Props {
-  fadeRate: number
-  fps: number
+  fadeRate?: number
+  fps?: number
   isPlaying: boolean
 }
 
@@ -21,18 +21,6 @@ const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
   }, [isPlaying])
 
   useEffect(() => {
-    if (gameRef.current) {
-      gameRef.current.setFps(fps)
-    }
-  }, [fps])
-
-  useEffect(() => {
-    if (gameRef.current) {
-      gameRef.current.setFadeRate(fadeRate)
-    }
-  }, [fadeRate])
-
-  useEffect(() => {
     const canvas = canvasRef.current
     const container = containerRef.current
 
@@ -44,7 +32,10 @@ const Canvas = ({ fadeRate, fps, isPlaying }: Props): React.ReactElement => {
           gameRef.current?.resize(container)
         }
         window.addEventListener('resize', resizeCallback)
-        gameRef.current = new Game(canvas, container)
+        gameRef.current = new Game(canvas, container, {
+          fadeRate: fadeRate,
+          fps: fps,
+        })
         gameRef.current.init()
         gameRef.current.mainLoop()
       }

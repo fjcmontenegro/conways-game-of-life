@@ -1,1 +1,1 @@
-export const CELL_SIZE = 10
+export const CELL_SIZE = 8
