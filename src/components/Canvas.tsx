@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react'
 import { DynamicGame } from '../game/modules/dynamic-game'
-import { Game } from '../game/modules/game'
 
 interface Props {
   fadeRate: number
