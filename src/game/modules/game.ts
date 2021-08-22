@@ -1,9 +1,9 @@
 import { CELL_SIZE } from '../constants/sizes'
-import { Grid2D, Point } from '../types/geometry'
+import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
-import formation1 from '../data/formation1.json'
 import { Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
+import { formation1, formation2 } from '../util/formations'
 
 type GameConstructorOptions = {
   drawDead?: boolean
@@ -29,6 +29,7 @@ export class Game {
   fadeRate: number
 
   lastLoopPerformance: number[]
+  drawDead: boolean
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -53,6 +54,7 @@ export class Game {
 
     this.fps = options?.fps ?? DEFAULT_FPS
     this.fadeRate = options?.fadeRate ?? DEFAULT_FADE_RATE
+    this.drawDead = options?.drawDead ?? true
   }
 
   resize(container: HTMLDivElement): void {
@@ -91,10 +93,10 @@ export class Game {
     window.addEventListener('keypress', ({ key }) => {
       if (key === 'e') {
         console.log(this.grid.export())
-      } else if (key === 'i') {
-        this.grid.import(formation1 as Grid2D)
       }
     })
+
+    this.addInitialFormation()
   }
 
   setPlay(play: boolean): void {
@@ -189,10 +191,8 @@ export class Game {
             CELL_SIZE,
             CELL_SIZE,
           )
-        } else {
-          this.context.fillStyle = `rgba(148, 210, 189, ${
-            this.fadeRate === 1 ? 0 : this.fadeRate / 2
-          })`
+        } else if (this.drawDead) {
+          this.context.fillStyle = `rgba(148, 210, 189, ${this.fadeRate / 2})`
           this.context.fillRect(
             x * CELL_SIZE,
             y * CELL_SIZE,
@@ -202,6 +202,14 @@ export class Game {
         }
       }
     }
+  }
+
+  addInitialFormation(): void {
+    const gridSize = {
+      x: Math.floor(this.canvas.width / CELL_SIZE),
+      y: Math.floor(this.canvas.height / CELL_SIZE),
+    }
+    formation1(this.grid, gridSize)
   }
 
   mainLoop(t?: number): void {

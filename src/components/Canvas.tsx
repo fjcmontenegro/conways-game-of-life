@@ -18,8 +18,6 @@ const Canvas = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
 
-  console.log('rendered', isPlaying)
-
   useEffect(() => {
     if (gameRef.current) {
       gameRef.current.setPlay(isPlaying)
@@ -63,7 +61,8 @@ const Canvas = ({
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    flex: 5,
+    width: '100%',
+    height: '100%',
   },
 }
 

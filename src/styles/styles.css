@@ -5,6 +5,12 @@
   overflow: auto;
 }
 
+.canvas-area {
+  flex: 5;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 h1 {
   text-align: center;
 }

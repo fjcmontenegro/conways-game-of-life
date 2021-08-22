@@ -13,9 +13,20 @@ export default function App(): React.ReactElement {
   return (
     <div style={style}>
       <Info onPlay={handleClick} isPlaying={isPlaying} />
-      {/* canvas 1 */}
-      {/* <Canvas isPlaying={isPlaying} fadeRate={1} /> */}
-      <Canvas isPlaying={isPlaying} fadeRate={1} drawDead />
+      <div className="canvas-area">
+        <div style={{ height: '50%', width: '50%' }}>
+          <Canvas isPlaying={isPlaying} fadeRate={1} drawDead={false} />
+        </div>
+        <div style={{ height: '50%', width: '50%' }}>
+          <Canvas isPlaying={isPlaying} fadeRate={1} />
+        </div>
+        <div style={{ height: '50%', width: '50%' }}>
+          <Canvas isPlaying={isPlaying} fadeRate={0.25} />
+        </div>
+        <div style={{ height: '50%', width: '50%' }}>
+          <Canvas isPlaying={isPlaying} fadeRate={0.05} />
+        </div>
+      </div>
     </div>
   )
 }
