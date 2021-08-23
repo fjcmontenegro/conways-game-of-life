@@ -5,18 +5,24 @@ import { Grid2D, Point } from '../types/geometry'
  * map.
  * @todo make this class BE the cells, and not hold cells
  */
-export class Grid {
-  cells: Grid2D
+export class Grid<T> {
+  cells: Grid2D<T>
+  /**
+   * This functions is used when creating empty neighbors when cells are set.
+   * The value returned by this function will be used for those neighbors
+   */
+  defaultNeighborSetter: () => T
 
-  constructor() {
+  constructor(defaultNeighborSetter: () => T) {
     this.cells = {}
+    this.defaultNeighborSetter = defaultNeighborSetter
   }
 
   /**
    * For game of life, when we create a tile in the grid, we will create all of
    * its neighbors.
    */
-  set(x: number, y: number, val: number, setNeighbors = true): void {
+  set(x: number, y: number, val: T, setNeighbors = true): void {
     if (this.cells[x] === undefined) {
       this.cells[x] = {}
     }
@@ -27,7 +33,7 @@ export class Grid {
       neighborsPos.map((pos) => {
         if (this.get(pos.x, pos.y) === null) {
           // when creating neighbors we don't want recursion
-          this.set(pos.x, pos.y, 0, false)
+          this.set(pos.x, pos.y, this.defaultNeighborSetter(), false)
         }
       })
     }
@@ -35,7 +41,7 @@ export class Grid {
     this.cells[x][y] = val
   }
 
-  get(x: number, y: number): number | null {
+  get(x: number, y: number): T | null {
     if (this.cells[x] === undefined) {
       return null
     }
@@ -72,22 +78,14 @@ export class Grid {
   /**
    * Returns the values of existing neighbor cells
    */
-  getNeighbors(x: number, y: number): number[] {
+  getNeighbors(x: number, y: number): T[] {
     const neighborsPos = this.getNeighborsPos(x, y)
     return neighborsPos
       .map((pos) => this.get(pos.x, pos.y))
-      .filter((cell) => cell !== null) as number[]
-  }
-
-  countAliveNeighbors(neighbors: number[]): number {
-    return neighbors.filter((cell) => cell === 1).length
+      .filter((cell) => cell !== null) as T[]
   }
 
   export(): string {
     return JSON.stringify(this.cells)
-  }
-
-  import(jsonGrid: Grid2D): void {
-    this.cells = jsonGrid
   }
 }

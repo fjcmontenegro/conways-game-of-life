@@ -1,7 +1,7 @@
 import { Grid } from '../modules/grid'
 import { Point } from '../types/geometry'
 
-export const formation1 = (grid: Grid, gridSize: Point): void => {
+export const formation1 = (grid: Grid<number>, gridSize: Point): void => {
   const formationSize = { x: 12, y: 3 }
   const offset = {
     x: Math.floor((gridSize.x - formationSize.x) / 2),
@@ -17,7 +17,7 @@ export const formation1 = (grid: Grid, gridSize: Point): void => {
   }
 }
 
-export const formation2 = (grid: Grid, offset: Point): void => {
+export const formation2 = (grid: Grid<number>, offset: Point): void => {
   const center = { x: offset.x + 10, y: offset.y + 10 }
   const radius = 10
 

@@ -16,7 +16,7 @@ export class Game {
   canvas: HTMLCanvasElement
   container: HTMLDivElement
   context: CanvasRenderingContext2D | null
-  grid: Grid
+  grid: Grid<number>
 
   isPlaying: boolean
   mousePos: Point
@@ -44,7 +44,7 @@ export class Game {
     this.canvas.width = container.clientWidth
     this.context = this.canvas.getContext('2d')
 
-    this.grid = new Grid()
+    this.grid = new Grid<number>(() => 0)
 
     this.mousePos = { x: 0, y: 0 }
     this.updatedCells = []
@@ -133,7 +133,7 @@ export class Game {
     }
 
     this.lastFrame = time
-    const newGrid = new Grid()
+    const newGrid = new Grid(() => 0)
 
     // evaluate entire existing map to generate newGrid
     for (const keyX in this.grid.cells) {
@@ -152,7 +152,7 @@ export class Game {
           break
         }
 
-        const count = this.grid.countAliveNeighbors(neighboors)
+        const count = neighboors.filter((cell) => cell === 1).length
 
         // Any live cell with two or three live neighbours survives.
         const rule1 = this.grid.get(x, y) === 1 && (count === 2 || count === 3)

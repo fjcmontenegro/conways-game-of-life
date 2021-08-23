@@ -3,8 +3,8 @@ export interface Point {
   y: number
 }
 
-export type Grid2D = {
+export type Grid2D<T> = {
   [x: number]: {
-    [y: number]: number
+    [y: number]: T
   }
 }

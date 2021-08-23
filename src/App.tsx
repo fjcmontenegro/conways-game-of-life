@@ -35,7 +35,7 @@ export default function App(): React.ReactElement {
         <Canvas
           isPlaying={isPlaying}
           immortality={immortality}
-          fadeRate={0.01}
+          fadeRate={0.1}
         />
       </div>
     </div>
