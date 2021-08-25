@@ -1,11 +1,19 @@
 import { Grid2D, Point } from '../types/geometry'
 
+export interface Cell {
+  life: number
+}
+
+export interface ColorCell extends Cell {
+  color: string
+}
+
 /**
  * There's no recycling in this class. If you need to remove cells, create a new
  * map.
  * @todo make this class BE the cells, and not hold cells
  */
-export class Grid<T> {
+export class Grid<T extends Cell> {
   cells: Grid2D<T>
   /**
    * This functions is used when creating empty neighbors when cells are set.
@@ -19,10 +27,21 @@ export class Grid<T> {
   }
 
   /**
+   * When setting cells, we don't create neighbors
+   */
+  setCell(x: number, y: number, cell: T): void {
+    if (this.cells[x] === undefined) {
+      this.cells[x] = {}
+    }
+
+    this.cells[x][y] = cell
+  }
+
+  /**
    * For game of life, when we create a tile in the grid, we will create all of
    * its neighbors.
    */
-  set(x: number, y: number, val: T, setNeighbors = true): void {
+  set(x: number, y: number, cell: T, setNeighbors = true): void {
     if (this.cells[x] === undefined) {
       this.cells[x] = {}
     }
@@ -38,19 +57,50 @@ export class Grid<T> {
       })
     }
 
-    this.cells[x][y] = val
+    this.cells[x][y] = {
+      ...cell,
+    }
   }
 
-  get(x: number, y: number): T | null {
+  /**
+   * When setting the value of an existing cell, we do create neighbors
+   */
+  setLife(x: number, y: number, life: number): void {
     if (this.cells[x] === undefined) {
-      return null
+      this.cells[x] = {}
+    }
+
+    const neighborsPos = this.getNeighborsPos(x, y)
+
+    neighborsPos.map((pos) => {
+      if (this.get(pos.x, pos.y) === null) {
+        // when creating neighbors we don't want recursion
+        this.setCell(pos.x, pos.y, this.defaultNeighborSetter())
+      }
+    })
+
+    this.cells[x][y] = this.defaultNeighborSetter()
+    this.cells[x][y].life = life
+  }
+
+  exists(x: number, y: number): boolean {
+    if (this.cells[x] === undefined) {
+      return false
     }
 
     if (this.cells[x][y] === undefined) {
-      return null
+      return false
     }
 
-    return this.cells[x][y]
+    return true
+  }
+
+  get(x: number, y: number): T | null {
+    if (this.exists(x, y)) {
+      return this.cells[x][y]
+    } else {
+      return null
+    }
   }
 
   count(): number {

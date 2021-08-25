@@ -1,9 +1,10 @@
 import { CELL_SIZE } from '../constants/sizes'
 import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
-import { Grid } from './grid'
+import { Cell, ColorCell, Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
-import { formation1, formation2, formation3 } from '../util/formations'
+import { getRandom, randomRGB, trunc } from '../util/random'
+import { winterPalette, rosePalette } from '../constants/palettes'
 
 /**
  * My game:
@@ -27,11 +28,17 @@ type GameConstructorOptions = {
   immortality?: boolean
 }
 
+const cellCreator = () => ({
+  life: 0,
+  // color: randomRGB(),
+  color: getRandom(winterPalette) as string,
+})
+
 export class Game {
   canvas: HTMLCanvasElement
   container: HTMLDivElement
   context: CanvasRenderingContext2D | null
-  grid: Grid<number>
+  grid: Grid<ColorCell>
 
   isPlaying: boolean
   mousePos: Point
@@ -59,7 +66,7 @@ export class Game {
     this.canvas.width = container.clientWidth
     this.context = this.canvas.getContext('2d')
 
-    this.grid = new Grid<number>(() => 0)
+    this.grid = new Grid<ColorCell>(cellCreator)
 
     this.mousePos = { x: 0, y: 0 }
     this.updatedCells = []
@@ -126,13 +133,25 @@ export class Game {
   }
 
   updatePoint(mouseX: number, mouseY: number): void {
-    const cellX = Math.floor(mouseX / CELL_SIZE)
-    const cellY = Math.floor(mouseY / CELL_SIZE)
-    const coord = `${cellX},${cellY}`
+    const x = Math.floor(mouseX / CELL_SIZE)
+    const y = Math.floor(mouseY / CELL_SIZE)
+    const coord = `${x},${y}`
 
     if (!this.updatedCells.includes(coord)) {
-      const cellVal = this.grid.get(cellX, cellY)
-      this.grid.set(cellX, cellY, cellVal === 1 ? 0 : 1)
+      if (this.grid.exists(x, y)) {
+        const cell = this.grid.get(x, y) as ColorCell
+        // this.grid.setLife(x, y, cell.life === 1 ? 0 : 1)
+        this.grid.set(x, y, {
+          color: cell.color,
+          life: cell.life === 1 ? 0 : 1,
+        })
+      } else {
+        const cell = {
+          color: getRandom(winterPalette) as string,
+          life: 1,
+        }
+        this.grid.set(x, y, cell)
+      }
       this.updatedCells.push(coord)
     }
   }
@@ -148,7 +167,7 @@ export class Game {
     }
 
     this.lastFrame = time
-    const newGrid = new Grid(() => 0)
+    const newGrid = new Grid<ColorCell>(cellCreator)
 
     // evaluate entire existing map to generate newGrid
     for (const keyX in this.grid.cells) {
@@ -167,28 +186,34 @@ export class Game {
           break
         }
 
-        const count = neighboors.filter((cell) => cell === 1).length
+        const count = neighboors.filter((cell) => cell.life === 1).length
+        const cell = this.grid.get(x, y)
 
         // Any live cell with two or three live neighbours survives.
-        const rule1 = this.grid.get(x, y) === 1 && (count === 2 || count === 3)
+        const rule1 = cell?.life === 1 && (count === 2 || count === 3)
         // Any dead cell with three live neighbours becomes a live cell
-        const rule2 = this.grid.get(x, y) !== 1 && count === 3
+        const rule2 = cell?.life !== 1 && count === 3
 
         if (rule1 || rule2) {
-          newGrid.set(x, y, 1)
+          const newCell = {
+            color: cell?.color ?? randomRGB(),
+            life: 1,
+          }
+          newGrid.set(x, y, newCell)
         } else {
           // All other live cells die in the next generation. Similarly, all other dead cells stay dead.
-          const cellOldValue = this.grid.get(x, y)
-
-          if (cellOldValue && cellOldValue > 0) {
-            if (this.immortality) {
-              newGrid.set(x, y, cellOldValue)
-            } else {
-              // take a bit of life away
-              const newValue = cellOldValue - this.fadeRate
-              // avoid rounding errors by limiting value to 0..1
-              newGrid.set(x, y, newValue < 0 ? 0 : newValue > 1 ? 1 : newValue)
-            }
+          if (cell && cell.life > 0) {
+            // if (this.immortality) {
+            //   newGrid.setLife(x, y, life)
+            // } else {
+            // take a bit of life away
+            const newValue = cell.life - this.fadeRate
+            // avoid rounding errors by limiting value to 0..1
+            newGrid.set(x, y, {
+              color: cell.color,
+              life: trunc(0, 1, newValue),
+            })
+            // }
           }
         }
       }
@@ -209,24 +234,26 @@ export class Game {
     for (const keyX in this.grid.cells) {
       for (const keyY in this.grid.cells[keyX]) {
         const [x, y] = [parseInt(keyX), parseInt(keyY)]
-        const cellValue = this.grid.get(x, y)
+        const cell = this.grid.get(x, y)
 
-        if (cellValue && cellValue > 0) {
-          this.context.fillStyle = `rgba(148, 210, 189, ${cellValue})`
-          this.context.fillRect(
-            x * CELL_SIZE,
-            y * CELL_SIZE,
-            CELL_SIZE,
-            CELL_SIZE,
-          )
-        } else if (this.drawDead) {
-          this.context.fillStyle = `rgba(148, 210, 189, ${this.fadeRate / 2})`
-          this.context.fillRect(
-            x * CELL_SIZE,
-            y * CELL_SIZE,
-            CELL_SIZE,
-            CELL_SIZE,
-          )
+        if (cell) {
+          if (cell.life > 0) {
+            this.context.fillStyle = `rgba(${cell.color}, ${cell.life})`
+            this.context.fillRect(
+              x * CELL_SIZE,
+              y * CELL_SIZE,
+              CELL_SIZE,
+              CELL_SIZE,
+            )
+          } else if (this.drawDead) {
+            this.context.fillStyle = `rgba(100,100,100, ${this.fadeRate / 2})`
+            this.context.fillRect(
+              x * CELL_SIZE,
+              y * CELL_SIZE,
+              CELL_SIZE,
+              CELL_SIZE,
+            )
+          }
         }
       }
     }
@@ -238,7 +265,7 @@ export class Game {
       y: Math.floor(this.canvas.height / CELL_SIZE),
     }
     // formation1(this.grid, gridSize)
-    formation2(this.grid, gridSize)
+    // formation2(this.grid, gridSize)
     // formation3(this.grid, gridSize)
   }
 
