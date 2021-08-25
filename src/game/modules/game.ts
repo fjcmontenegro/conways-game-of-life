@@ -3,7 +3,22 @@ import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import { Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
-import { formation1, formation2 } from '../util/formations'
+import { formation1, formation2, formation3 } from '../util/formations'
+
+/**
+ * My game:
+ * n  live  dead
+ * 0  dead  dead
+ * 1  dead  dead
+ * 2  live  dead
+ * 3  live  dead
+ * 4  live  live
+ * 5  live  live
+ * 6  dead  dead
+ * 7  dead  dead
+ * 8  dead  dead
+ * 9  dead  dead
+ */
 
 type GameConstructorOptions = {
   drawDead?: boolean
@@ -222,7 +237,9 @@ export class Game {
       x: Math.floor(this.canvas.width / CELL_SIZE),
       y: Math.floor(this.canvas.height / CELL_SIZE),
     }
-    formation1(this.grid, gridSize)
+    // formation1(this.grid, gridSize)
+    formation2(this.grid, gridSize)
+    // formation3(this.grid, gridSize)
   }
 
   mainLoop(t?: number): void {

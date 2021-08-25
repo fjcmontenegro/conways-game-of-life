@@ -20,22 +20,14 @@ export default function App(): React.ReactElement {
         isPlaying={isPlaying}
       />
       <div className="canvas-area">
-        {/* <div style={{ height: '50%', width: '50%' }}>
-          <Canvas isPlaying={isPlaying} fadeRate={1} drawDead={false} />
-        </div>
-        <div style={{ height: '50%', width: '50%' }}>
-          <Canvas isPlaying={isPlaying} fadeRate={1} />
-        </div>
-        <div style={{ height: '50%', width: '50%' }}>
-          <Canvas isPlaying={isPlaying} fadeRate={0.25} />
-        </div>
-        <div style={{ height: '50%', width: '50%' }}>
-          <Canvas isPlaying={isPlaying} fadeRate={0.05} />
-        </div> */}
+        {/* <Canvas isPlaying={isPlaying} fadeRate={1} drawDead={false} /> */}
+        {/* <Canvas isPlaying={isPlaying} fadeRate={1} /> */}
+        {/* <Canvas isPlaying={isPlaying} fadeRate={0.25} /> */}
+        {/* <Canvas isPlaying={isPlaying} fadeRate={0.05} /> */}
         <Canvas
           isPlaying={isPlaying}
           immortality={immortality}
-          fadeRate={0.1}
+          fadeRate={0.05}
         />
       </div>
     </div>

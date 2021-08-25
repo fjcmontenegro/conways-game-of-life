@@ -17,14 +17,84 @@ export const formation1 = (grid: Grid<number>, gridSize: Point): void => {
   }
 }
 
-export const formation2 = (grid: Grid<number>, offset: Point): void => {
-  const center = { x: offset.x + 10, y: offset.y + 10 }
-  const radius = 10
+export const formation2 = (grid: Grid<number>, gridSize: Point): void => {
+  const xperiod = 11
+  const totalPeriods = 5
+  const yperiod = 11
+  let on = true
 
-  for (let angle = 0; angle < 2 * Math.PI; angle += Math.PI / 36) {
-    const x = Math.floor(center.x + radius * Math.cos(angle))
-    const y = Math.floor(center.y + radius * Math.sin(angle))
-    console.log(x, y)
-    grid.set(x, y, 1)
+  const center = {
+    x: Math.floor(gridSize.x / 2) - Math.floor((xperiod * totalPeriods) / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  for (let i = 0; i < xperiod * totalPeriods; i++) {
+    if (on) {
+      grid.set(center.x + i, center.y - yperiod * 2, 1)
+      grid.set(center.x + i, center.y - yperiod, 1)
+      grid.set(center.x + i, center.y, 1)
+      grid.set(center.x + i, center.y + yperiod, 1)
+      grid.set(center.x + i, center.y + yperiod * 2, 1)
+    }
+
+    if (i % xperiod === xperiod - 1) {
+      on = !on
+    }
+  }
+}
+
+export const formation3 = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x) / 2,
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  const cells: Point[] = [
+    { x: 4, y: 6 },
+    { x: 3, y: 6 },
+    { x: 2, y: 6 },
+
+    { x: 6, y: 4 },
+    { x: 6, y: 3 },
+    { x: 6, y: 2 },
+
+    { x: 1, y: 4 },
+    { x: 1, y: 3 },
+    { x: 1, y: 2 },
+
+    { x: 4, y: 1 },
+    { x: 3, y: 1 },
+    { x: 2, y: 1 },
+  ]
+
+  cells.map((cell) => grid.set(center.x + cell.x, center.y + cell.y, 1))
+  cells.map((cell) => grid.set(center.x - cell.x, center.y + cell.y, 1))
+  cells.map((cell) => grid.set(center.x + cell.x, center.y - cell.y, 1))
+  cells.map((cell) => grid.set(center.x - cell.x, center.y - cell.y, 1))
+}
+
+export const formation4 = (grid: Grid<number>, gridSize: Point): void => {
+  const xperiod = 7
+  const totalPeriods = 7
+  const yperiod = 5
+  let on = true
+
+  const center = {
+    x: Math.floor(gridSize.x / 2) - Math.floor((xperiod * totalPeriods) / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  for (let i = 0; i < xperiod * totalPeriods; i++) {
+    if (on) {
+      grid.set(center.x + i, center.y - yperiod * 2, 1)
+      grid.set(center.x + i, center.y - yperiod, 1)
+      grid.set(center.x + i, center.y, 1)
+      grid.set(center.x + i, center.y + yperiod, 1)
+      grid.set(center.x + i, center.y + yperiod * 2, 1)
+    }
+
+    if (i % xperiod === xperiod - 1) {
+      on = !on
+    }
   }
 }
