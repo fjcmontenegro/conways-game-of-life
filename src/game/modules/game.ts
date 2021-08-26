@@ -3,28 +3,15 @@ import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import { Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
-import { formation1, formation2, formation3 } from '../util/formations'
+import { gliderGun } from '../util/formations'
 
-/**
- * My game:
- * n  live  dead
- * 0  dead  dead
- * 1  dead  dead
- * 2  live  dead
- * 3  live  dead
- * 4  live  live
- * 5  live  live
- * 6  dead  dead
- * 7  dead  dead
- * 8  dead  dead
- * 9  dead  dead
- */
-
-type GameConstructorOptions = {
+export type GameConstructorOptions = {
   drawDead?: boolean
   fps?: number
   fadeRate?: number
   immortality?: boolean
+  bgColor?: string
+  cellColor?: string
 }
 
 export class Game {
@@ -47,6 +34,8 @@ export class Game {
   lastLoopPerformance: number[]
   drawDead: boolean
   immortality: boolean
+  bgColor: string
+  cellColor: string
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -73,6 +62,8 @@ export class Game {
     this.fadeRate = options?.fadeRate ?? DEFAULT_FADE_RATE
     this.drawDead = options?.drawDead ?? true
     this.immortality = options?.immortality ?? false
+    this.bgColor = options?.bgColor ?? '#001219'
+    this.cellColor = options?.cellColor ?? '148, 210, 189'
   }
 
   resize(container: HTMLDivElement): void {
@@ -204,7 +195,12 @@ export class Game {
   render(): void {
     if (!this.context) return
 
-    clearCanvas(this.context, this.canvas.width, this.canvas.height)
+    clearCanvas(
+      this.context,
+      this.canvas.width,
+      this.canvas.height,
+      this.bgColor,
+    )
 
     for (const keyX in this.grid.cells) {
       for (const keyY in this.grid.cells[keyX]) {
@@ -212,7 +208,7 @@ export class Game {
         const cellValue = this.grid.get(x, y)
 
         if (cellValue && cellValue > 0) {
-          this.context.fillStyle = `rgba(148, 210, 189, ${cellValue})`
+          this.context.fillStyle = `rgba(${this.cellColor}, ${cellValue})`
           this.context.fillRect(
             x * CELL_SIZE,
             y * CELL_SIZE,
@@ -220,7 +216,9 @@ export class Game {
             CELL_SIZE,
           )
         } else if (this.drawDead) {
-          this.context.fillStyle = `rgba(148, 210, 189, ${this.fadeRate / 2})`
+          this.context.fillStyle = `rgba(${this.cellColor}, ${
+            this.fadeRate / 2
+          })`
           this.context.fillRect(
             x * CELL_SIZE,
             y * CELL_SIZE,
@@ -237,9 +235,7 @@ export class Game {
       x: Math.floor(this.canvas.width / CELL_SIZE),
       y: Math.floor(this.canvas.height / CELL_SIZE),
     }
-    // formation1(this.grid, gridSize)
-    formation2(this.grid, gridSize)
-    // formation3(this.grid, gridSize)
+    gliderGun(this.grid, gridSize)
   }
 
   mainLoop(t?: number): void {

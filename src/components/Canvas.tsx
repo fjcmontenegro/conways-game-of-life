@@ -1,21 +1,11 @@
 import React, { useEffect, useRef } from 'react'
-import { Game } from '../game/modules/game'
+import { Game, GameConstructorOptions } from '../game/modules/game'
 
-interface Props {
-  drawDead?: boolean
-  fadeRate?: number
-  fps?: number
-  immortality?: boolean
+type Props = {
   isPlaying: boolean
-}
+} & GameConstructorOptions
 
-const Canvas = ({
-  drawDead,
-  fadeRate,
-  fps,
-  immortality,
-  isPlaying,
-}: Props): React.ReactElement => {
+const Canvas = ({ isPlaying, ...props }: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
@@ -27,10 +17,10 @@ const Canvas = ({
   }, [isPlaying])
 
   useEffect(() => {
-    if (gameRef.current && immortality !== undefined) {
-      gameRef.current.setImmortality(immortality)
+    if (gameRef.current && props.immortality !== undefined) {
+      gameRef.current.setImmortality(props.immortality)
     }
-  }, [immortality])
+  }, [props.immortality])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -44,12 +34,7 @@ const Canvas = ({
           gameRef.current?.resize(container)
         }
         window.addEventListener('resize', resizeCallback)
-        gameRef.current = new Game(canvas, container, {
-          fadeRate: fadeRate,
-          fps: fps,
-          drawDead: drawDead,
-          immortality: immortality,
-        })
+        gameRef.current = new Game(canvas, container, props)
         gameRef.current.init()
         gameRef.current.mainLoop()
       }
@@ -62,7 +47,7 @@ const Canvas = ({
     }
   }, [canvasRef, containerRef])
   return (
-    <div ref={containerRef} style={styles.container}>
+    <div ref={containerRef} className="Canvas" style={styles.container}>
       <canvas ref={canvasRef} />
     </div>
   )

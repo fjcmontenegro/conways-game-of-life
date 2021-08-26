@@ -2,8 +2,8 @@ export const clearCanvas = (
   context: CanvasRenderingContext2D,
   w: number,
   h: number,
+  color: string,
 ): void => {
-  // context.fillStyle = '#001219'
-  context.fillStyle = '#001219'
+  context.fillStyle = `rgb(${color})`
   context.fillRect(0, 0, w, h)
 }

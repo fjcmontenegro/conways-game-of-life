@@ -98,3 +98,74 @@ export const formation4 = (grid: Grid<number>, gridSize: Point): void => {
     }
   }
 }
+
+export const formation5 = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  grid.set(center.x, center.y, 1)
+
+  grid.set(center.x + 2, center.y, 1)
+  grid.set(center.x + 2, center.y + 1, 1)
+
+  grid.set(center.x + 4, center.y + 2, 1)
+  grid.set(center.x + 4, center.y + 3, 1)
+  grid.set(center.x + 4, center.y + 4, 1)
+
+  grid.set(center.x + 6, center.y + 3, 1)
+  grid.set(center.x + 6, center.y + 4, 1)
+  grid.set(center.x + 6, center.y + 5, 1)
+  grid.set(center.x + 7, center.y + 4, 1)
+}
+
+export const gliderGun = (grid: Grid<number>, gridSize: Point): void => {
+  const startX = Math.floor(gridSize.x / 2) - 18 // width is 36
+  const startY = Math.floor(gridSize.y / 2) - 4 // height is 9
+
+  grid.set(startX + 24, startY, 1)
+
+  grid.set(startX + 22, startY + 1, 1)
+  grid.set(startX + 24, startY + 1, 1)
+
+  grid.set(startX + 12, startY + 2, 1)
+  grid.set(startX + 13, startY + 2, 1)
+  grid.set(startX + 20, startY + 2, 1)
+  grid.set(startX + 21, startY + 2, 1)
+  grid.set(startX + 34, startY + 2, 1)
+  grid.set(startX + 35, startY + 2, 1)
+
+  grid.set(startX + 11, startY + 3, 1)
+  grid.set(startX + 15, startY + 3, 1)
+  grid.set(startX + 20, startY + 3, 1)
+  grid.set(startX + 21, startY + 3, 1)
+  grid.set(startX + 34, startY + 3, 1)
+  grid.set(startX + 35, startY + 3, 1)
+
+  grid.set(startX, startY + 4, 1)
+  grid.set(startX + 1, startY + 4, 1)
+  grid.set(startX + 10, startY + 4, 1)
+  grid.set(startX + 16, startY + 4, 1)
+  grid.set(startX + 20, startY + 4, 1)
+  grid.set(startX + 21, startY + 4, 1)
+
+  grid.set(startX, startY + 5, 1)
+  grid.set(startX + 1, startY + 5, 1)
+  grid.set(startX + 10, startY + 5, 1)
+  grid.set(startX + 14, startY + 5, 1)
+  grid.set(startX + 16, startY + 5, 1)
+  grid.set(startX + 17, startY + 5, 1)
+  grid.set(startX + 22, startY + 5, 1)
+  grid.set(startX + 24, startY + 5, 1)
+
+  grid.set(startX + 10, startY + 6, 1)
+  grid.set(startX + 16, startY + 6, 1)
+  grid.set(startX + 24, startY + 6, 1)
+
+  grid.set(startX + 11, startY + 7, 1)
+  grid.set(startX + 15, startY + 7, 1)
+
+  grid.set(startX + 12, startY + 8, 1)
+  grid.set(startX + 13, startY + 8, 1)
+}
