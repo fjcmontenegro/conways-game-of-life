@@ -169,3 +169,70 @@ export const gliderGun = (grid: Grid<number>, gridSize: Point): void => {
   grid.set(startX + 12, startY + 8, 1)
   grid.set(startX + 13, startY + 8, 1)
 }
+
+export const rule1 = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  grid.set(center.x - 1, center.y, 1)
+  grid.set(center.x + 2, center.y, 1)
+  grid.set(center.x + 2, center.y + 1, 1)
+}
+
+export const rule2 = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  grid.set(center.x - 9, center.y, 1)
+  grid.set(center.x - 9, center.y - 1, 1)
+  grid.set(center.x - 8, center.y + 1, 1)
+  grid.set(center.x - 8, center.y - 1, 1)
+  grid.set(center.x - 7, center.y, 1)
+  grid.set(center.x - 7, center.y + 1, 1)
+
+  grid.set(center.x - 4, center.y, 1)
+  grid.set(center.x - 3, center.y + 1, 1)
+  grid.set(center.x - 3, center.y - 1, 1)
+  grid.set(center.x - 2, center.y, 1)
+
+  grid.set(center.x + 9, center.y, 1)
+  grid.set(center.x + 8, center.y, 1)
+  grid.set(center.x + 7, center.y, 1)
+}
+
+export const rule3 = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  grid.set(center.x - 1, center.y, 1)
+  grid.set(center.x, center.y, 1)
+  grid.set(center.x, center.y + 1, 1)
+  grid.set(center.x, center.y - 1, 1)
+  grid.set(center.x + 1, center.y, 1)
+}
+
+export const rule4 = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  grid.set(center.x - 2, center.y - 2, 1)
+  grid.set(center.x - 2, center.y, 1)
+  grid.set(center.x - 2, center.y + 2, 1)
+
+  grid.set(center.x, center.y - 3, 1)
+  grid.set(center.x, center.y - 1, 1)
+  grid.set(center.x, center.y + 1, 1)
+  grid.set(center.x, center.y + 3, 1)
+
+  grid.set(center.x + 2, center.y - 2, 1)
+  grid.set(center.x + 2, center.y, 1)
+  grid.set(center.x + 2, center.y + 2, 1)
+}

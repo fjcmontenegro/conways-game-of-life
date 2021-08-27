@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import { GameConstructorOptions } from '../game/modules/game'
+import { Formation, GameConstructorOptions } from '../game/modules/game'
 import '../styles/Game.scss'
 import Canvas from './Canvas'
 
 type Props = {
-  playOnMount: boolean
+  playOnMount?: boolean
+  initialFormation?: Formation
 } & GameConstructorOptions
 
-const Game = ({ playOnMount = false, ...props }: Props) => {
+const Game = ({ playOnMount = false, initialFormation, ...props }: Props) => {
   const [isPlaying, setIsPlaying] = useState(playOnMount)
   const [canvasId, setCanvasId] = useState(new Date().getTime())
 
@@ -24,7 +25,12 @@ const Game = ({ playOnMount = false, ...props }: Props) => {
           Reset
         </button>
       </div>
-      <Canvas key={canvasId} isPlaying={isPlaying} {...props} />
+      <Canvas
+        key={canvasId}
+        isPlaying={isPlaying}
+        initialFormation={initialFormation}
+        {...props}
+      />
     </div>
   )
 }

@@ -3,7 +3,18 @@ import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import { Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
-import { gliderGun } from '../util/formations'
+import { gliderGun, rule1, rule2, rule3, rule4 } from '../util/formations'
+
+type FormationFunction = (grid: Grid<number>, gridSize: Point) => void
+const INITIAL_FORMATIONS = {
+  gliderGun,
+  rule1,
+  rule2,
+  rule3,
+  rule4,
+} as const
+
+export type Formation = keyof typeof INITIAL_FORMATIONS
 
 export type GameConstructorOptions = {
   drawDead?: boolean
@@ -72,7 +83,7 @@ export class Game {
     this.container = container
   }
 
-  init(): void {
+  init(initialFormation?: Formation): void {
     this.container.addEventListener(
       'mousemove',
       ({ buttons, offsetX, offsetY }) => {
@@ -105,7 +116,8 @@ export class Game {
       }
     })
 
-    this.addInitialFormation()
+    initialFormation &&
+      this.addInitialFormation(INITIAL_FORMATIONS[initialFormation])
   }
 
   setPlay(play: boolean): void {
@@ -230,12 +242,12 @@ export class Game {
     }
   }
 
-  addInitialFormation(): void {
+  addInitialFormation(formationFn: FormationFunction): void {
     const gridSize = {
       x: Math.floor(this.canvas.width / CELL_SIZE),
       y: Math.floor(this.canvas.height / CELL_SIZE),
     }
-    gliderGun(this.grid, gridSize)
+    formationFn(this.grid, gridSize)
   }
 
   mainLoop(t?: number): void {

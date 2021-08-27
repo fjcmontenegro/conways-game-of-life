@@ -10,6 +10,7 @@
   padding: 0;
   padding-bottom: 6rem;
   width: 100%;
+  color: rgba(0, 18, 25);
 
   h1,
   h2,
@@ -20,9 +21,24 @@
     margin-bottom: 2rem;
   }
 
+  h2 {
+    font-size: 1.5rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
   p,
-  li {
+  li,
+  blockquote {
     font-size: 2rem;
+  }
+  blockquote {
+    padding-left: 2rem;
+    margin: 1rem 0;
+    border-left: 3px solid;
+    color: rgba(0, 18, 25);
   }
 
   a {
@@ -51,5 +67,18 @@
 
   .body-width {
     max-width: 1000px;
+  }
+
+  .rule-demo {
+    display: flex;
+    align-items: center;
+
+    p {
+      flex: 5;
+    }
+    .game {
+      height: 210px;
+      margin: 0 0.5rem;
+    }
   }
 }

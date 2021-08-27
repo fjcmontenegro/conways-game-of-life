@@ -1,11 +1,16 @@
 import React, { useEffect, useRef } from 'react'
-import { Game, GameConstructorOptions } from '../game/modules/game'
+import { Formation, Game, GameConstructorOptions } from '../game/modules/game'
 
 type Props = {
   isPlaying: boolean
+  initialFormation?: Formation
 } & GameConstructorOptions
 
-const Canvas = ({ isPlaying, ...props }: Props): React.ReactElement => {
+const Canvas = ({
+  isPlaying,
+  initialFormation,
+  ...props
+}: Props): React.ReactElement => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const gameRef = useRef<Game>()
@@ -35,7 +40,7 @@ const Canvas = ({ isPlaying, ...props }: Props): React.ReactElement => {
         }
         window.addEventListener('resize', resizeCallback)
         gameRef.current = new Game(canvas, container, props)
-        gameRef.current.init()
+        gameRef.current.init(initialFormation)
         gameRef.current.mainLoop()
         gameRef.current.setPlay(isPlaying)
       }
@@ -49,7 +54,7 @@ const Canvas = ({ isPlaying, ...props }: Props): React.ReactElement => {
   }, [canvasRef, containerRef])
   return (
     <div ref={containerRef} className="Canvas" style={styles.container}>
-      <canvas ref={canvasRef} />
+      <canvas ref={canvasRef} height={containerRef.current?.clientHeight} />
     </div>
   )
 }
