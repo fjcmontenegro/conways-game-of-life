@@ -3,8 +3,12 @@ import { GameConstructorOptions } from '../game/modules/game'
 import '../styles/Game.scss'
 import Canvas from './Canvas'
 
-const Game = (props: GameConstructorOptions) => {
-  const [isPlaying, setIsPlaying] = useState(false)
+type Props = {
+  playOnMount: boolean
+} & GameConstructorOptions
+
+const Game = ({ playOnMount = false, ...props }: Props) => {
+  const [isPlaying, setIsPlaying] = useState(playOnMount)
 
   return (
     <div className="Game">

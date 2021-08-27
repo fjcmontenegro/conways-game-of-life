@@ -37,6 +37,7 @@ const Canvas = ({ isPlaying, ...props }: Props): React.ReactElement => {
         gameRef.current = new Game(canvas, container, props)
         gameRef.current.init()
         gameRef.current.mainLoop()
+        gameRef.current.setPlay(isPlaying)
       }
     }
 
