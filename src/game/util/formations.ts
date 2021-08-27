@@ -243,6 +243,12 @@ export const forms = (grid: Grid<number>, gridSize: Point): void => {
     y: Math.floor(gridSize.y / 2),
   }
 
+  grid.set(center.x - 15, center.y - 15, 1)
+  grid.set(center.x - 16, center.y - 13, 1)
+  grid.set(center.x - 15, center.y - 13, 1)
+  grid.set(center.x - 14, center.y - 14, 1)
+  grid.set(center.x - 14, center.y - 13, 1)
+
   grid.set(center.x - 15, center.y - 1, 1)
   grid.set(center.x - 15, center.y, 1)
   grid.set(center.x - 16, center.y - 1, 1)

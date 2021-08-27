@@ -155,15 +155,17 @@ export default function App(): React.ReactElement {
         <h2>2. Forms of life</h2>
         <p>
           There are a lot of patterns that emerge in GoL, and they can be
-          classified. I&apos;m just going to mention two.
+          classified. I&apos;m just going to talk about a few of them.
         </p>
         <div className="life-form-demo">
           <p>
-            The most common from of life are <b>still forms</b>, when cells get
+            The most common form of life are <b>still lifes</b>, when cells get
             themselves in a formation that doesn&apos;t change from one frame to
             the next. Another common life form are <b>oscillators</b>,
             formations that go back and forth between two states. And look, our
-            little friend <b>blinker</b> is in there!
+            little friend <b>blinker</b> is in there! We also have that guy
+            crossing the entire grid. That&apos;s a <b>spaceship</b>, and I bet
+            you know why they have this name.
           </p>
           <div className="game">
             <Game
@@ -171,7 +173,7 @@ export default function App(): React.ReactElement {
               cellColor="148, 210, 189"
               initialFormation="forms"
               fps={10}
-              fadeRate={1 / 2}
+              fadeRate={1 / 3}
               drawDead={false}
             />
           </div>
@@ -182,28 +184,60 @@ export default function App(): React.ReactElement {
           that got me thinking, where can we go from here?
         </p>
         {/*  */}
-        <h2>3. Playing the Game of Life</h2>
+        <h2>3. The next step</h2>
         <p>
           When I add a little fading effect for dying cells and use a higher
-          frame rate, we can start getting interesting results. Here&apos; a
+          frame rate, we can start getting interesting results. Here&apos;s a
           demo with a <b>Gosper glider gun</b>. Guns are formations that
           oscillate between states, and end up generating <b>spaceships</b>.
-          These are forms of life that move forward indefinitely. Check it out!
+          Check it out!
         </p>
         <div className="gun-demo">
           <Game
             bgColor="0, 18, 25"
             cellColor="148, 210, 189"
-            playOnMount={true}
             initialFormation="gliderGun"
-            fps={25}
-            fadeRate={0.05}
+            fps={20}
+            fadeRate={1 / 20}
           />
         </div>
         <p>
           Here we have a higher frame rate as well as slower fading effect. The
-          cell only leaves the grid 20 frames after its death.
+          cell only leaves the grid 20 frames after its death. Try it out for
+          your self, make a nice painting.
         </p>
+        <p>
+          You&apos;ll find out that life also brings destruction. A single cell
+          can make that gun explode in a thousand bits, and only a few still
+          lifes will survive after the fireworks, the scattered remains of the
+          beautiful machine it once was. This is starting to get pretty fun to
+          play with!
+        </p>
+        {/*  */}
+        <h2>4. Playing the Game of Life</h2>
+        <p>
+          I&apos;ve added extra buttons to the next simulation. Some interesting
+          formations that I found, and the <b>immortality</b> mode. That button
+          will make so that no cell ever dies. The result looks like a colony of
+          bacteria, growing. The cells still follow rule 4, so they may stop
+          growing at some point. And when you turn immortality off, most of the
+          cells will die because of overpopulation, but some may survive, and
+          keep the game going.
+        </p>
+        <p>
+          Now it&apos;s your turn to play the Game of Life, and find out what
+          secrets it hides, what we can learn, and, most importantly, have fun
+          exploring!
+        </p>
+      </div>
+
+      <div className="play-demo">
+        <Game
+          bgColor="0, 18, 25"
+          cellColor="148, 210, 189"
+          fps={15}
+          fadeRate={1 / 8}
+        />
       </div>
     </div>
   )
