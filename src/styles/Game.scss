@@ -13,7 +13,6 @@
 
     button {
       border: 2px solid rgba(148, 210, 189, 0.5);
-
       background-color: rgb(0, 18, 25);
       color: rgb(148, 210, 189);
       flex: 4;
@@ -21,6 +20,12 @@
       font-weight: bold;
 
       transition: all 0.2s;
+
+      &.inverted {
+        border: 2px solid rgba(0, 18, 25, 0.5);
+        color: rgb(0, 18, 25);
+        background-color: rgb(148, 210, 189);
+      }
 
       &.reset-button {
         flex: 1;
@@ -31,6 +36,11 @@
     button:active {
       color: #001219;
       background-color: rgb(148, 210, 189);
+
+      &.inverted {
+        background-color: rgb(0, 18, 25);
+        color: rgb(148, 210, 189);
+      }
     }
 
     button:disabled {

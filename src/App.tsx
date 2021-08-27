@@ -237,6 +237,7 @@ export default function App(): React.ReactElement {
           cellColor="148, 210, 189"
           fps={15}
           fadeRate={1 / 8}
+          showCustomFormations={true}
         />
       </div>
     </div>

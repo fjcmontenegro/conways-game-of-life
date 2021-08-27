@@ -10,6 +10,11 @@ import {
   rule3,
   rule4,
   forms,
+  fiveBlocks,
+  theBrain,
+  pulsars,
+  formation4,
+  neverendingThingy,
 } from '../util/formations'
 
 type FormationFunction = (grid: Grid<number>, gridSize: Point) => void
@@ -20,6 +25,11 @@ const INITIAL_FORMATIONS = {
   rule3,
   rule4,
   forms,
+  fiveBlocks,
+  theBrain,
+  pulsars,
+  formation4,
+  neverendingThingy,
 } as const
 
 export type Formation = keyof typeof INITIAL_FORMATIONS
