@@ -43,6 +43,7 @@ export default function App(): React.ReactElement {
           You can control the simulations through the buttons on the left. Have
           fun!
         </p>
+        {/*  */}
         <h2>1. Rules of life</h2>
         <p>
           Every cell in the Game of Life, dead or alive, is controlled by the
@@ -146,10 +147,63 @@ export default function App(): React.ReactElement {
             form two full lines (and keep going from there).
           </p>
         </div>
-        In the right we have our <b>blinker</b>, and now you know how it exists.
-        The two cells above and below the center one will become alive, while
-        the two living cells in the extremes will die. In the next frame, the
-        same thing happens, and on and on.
+        <p>
+          Interact with the demos and see if you can come up with interesting{' '}
+          <b>forms of life</b>.
+        </p>
+        {/*  */}
+        <h2>2. Forms of life</h2>
+        <p>
+          There are a lot of patterns that emerge in GoL, and they can be
+          classified. I&apos;m just going to mention two.
+        </p>
+        <div className="life-form-demo">
+          <p>
+            The most common from of life are <b>still forms</b>, when cells get
+            themselves in a formation that doesn&apos;t change from one frame to
+            the next. Another common life form are <b>oscillators</b>,
+            formations that go back and forth between two states. And look, our
+            little friend <b>blinker</b> is in there!
+          </p>
+          <div className="game">
+            <Game
+              bgColor="0, 18, 25"
+              cellColor="148, 210, 189"
+              initialFormation="forms"
+              fps={10}
+              fadeRate={1 / 2}
+              drawDead={false}
+            />
+          </div>
+        </div>
+        <p>
+          If you interact with this demo, you&apos;ll see I bumped the frame
+          rate to 10, and I added a nice fading effect when the cell dies. So,
+          that got me thinking, where can we go from here?
+        </p>
+        {/*  */}
+        <h2>3. Playing the Game of Life</h2>
+        <p>
+          When I add a little fading effect for dying cells and use a higher
+          frame rate, we can start getting interesting results. Here&apos; a
+          demo with a <b>Gosper glider gun</b>. Guns are formations that
+          oscillate between states, and end up generating <b>spaceships</b>.
+          These are forms of life that move forward indefinitely. Check it out!
+        </p>
+        <div className="gun-demo">
+          <Game
+            bgColor="0, 18, 25"
+            cellColor="148, 210, 189"
+            playOnMount={true}
+            initialFormation="gliderGun"
+            fps={25}
+            fadeRate={0.05}
+          />
+        </div>
+        <p>
+          Here we have a higher frame rate as well as slower fading effect. The
+          cell only leaves the grid 20 frames after its death.
+        </p>
       </div>
     </div>
   )

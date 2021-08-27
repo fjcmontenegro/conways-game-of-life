@@ -236,3 +236,38 @@ export const rule4 = (grid: Grid<number>, gridSize: Point): void => {
   grid.set(center.x + 2, center.y, 1)
   grid.set(center.x + 2, center.y + 2, 1)
 }
+
+export const forms = (grid: Grid<number>, gridSize: Point): void => {
+  const center = {
+    x: Math.floor(gridSize.x / 2),
+    y: Math.floor(gridSize.y / 2),
+  }
+
+  grid.set(center.x - 15, center.y - 1, 1)
+  grid.set(center.x - 15, center.y, 1)
+  grid.set(center.x - 16, center.y - 1, 1)
+  grid.set(center.x - 16, center.y, 1)
+
+  grid.set(center.x - 3, center.y + 10, 1)
+  grid.set(center.x - 2, center.y + 11, 1)
+  grid.set(center.x - 2, center.y + 9, 1)
+  grid.set(center.x - 1, center.y + 11, 1)
+  grid.set(center.x - 1, center.y + 9, 1)
+  grid.set(center.x, center.y + 10, 1)
+
+  grid.set(center.x - 5, center.y - 10, 1)
+  grid.set(center.x - 4, center.y - 11, 1)
+  grid.set(center.x - 4, center.y - 9, 1)
+  grid.set(center.x - 3, center.y - 10, 1)
+
+  grid.set(center.x + 6, center.y - 6, 1)
+  grid.set(center.x + 7, center.y - 6, 1)
+  grid.set(center.x + 8, center.y - 6, 1)
+
+  grid.set(center.x + 10, center.y + 5, 1)
+  grid.set(center.x + 11, center.y + 5, 1)
+  grid.set(center.x + 11, center.y + 6, 1)
+  grid.set(center.x + 12, center.y + 5, 1)
+  grid.set(center.x + 12, center.y + 6, 1)
+  grid.set(center.x + 13, center.y + 6, 1)
+}

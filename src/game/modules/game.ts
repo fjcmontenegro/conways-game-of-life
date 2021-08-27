@@ -3,7 +3,14 @@ import { Point } from '../types/geometry'
 import { clearCanvas } from '../util/canvas'
 import { Grid } from './grid'
 import { DEFAULT_FADE_RATE, DEFAULT_FPS } from '../constants/animation'
-import { gliderGun, rule1, rule2, rule3, rule4 } from '../util/formations'
+import {
+  gliderGun,
+  rule1,
+  rule2,
+  rule3,
+  rule4,
+  forms,
+} from '../util/formations'
 
 type FormationFunction = (grid: Grid<number>, gridSize: Point) => void
 const INITIAL_FORMATIONS = {
@@ -12,6 +19,7 @@ const INITIAL_FORMATIONS = {
   rule2,
   rule3,
   rule4,
+  forms,
 } as const
 
 export type Formation = keyof typeof INITIAL_FORMATIONS

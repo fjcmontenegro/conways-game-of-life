@@ -81,4 +81,20 @@
       margin: 0 0.5rem;
     }
   }
+  .life-form-demo {
+    display: flex;
+    align-items: center;
+
+    p {
+      flex: 1;
+    }
+    .game {
+      flex: 1;
+      height: 340px;
+      margin: 0 0.5rem;
+    }
+  }
+  .gun-demo {
+    height: 500px;
+  }
 }
