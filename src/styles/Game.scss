@@ -17,11 +17,16 @@
 
       background-color: rgb(0, 18, 25);
       color: rgb(148, 210, 189);
-      flex: 1;
+      flex: 4;
       font-size: 1rem;
       font-weight: bold;
 
       transition: all 0.2s;
+
+      &.reset-button {
+        flex: 1;
+        min-height: 45px;
+      }
     }
 
     button:active {

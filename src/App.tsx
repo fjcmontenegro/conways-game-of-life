@@ -33,7 +33,14 @@ export default function App(): React.ReactElement {
           The Game of Life is a pretty fun cellular automaton. It was created by
           the British mathematician John Horton Conway in 1970. It&apos;s a 2D
           grid where every cell is either <b>dead</b> or <b>alive</b>, and they
-          interact with their neighbors following four simple rules.
+          interact with their neighbors following simple rules.
+        </p>
+        <p>
+          I will present the Game of Life to you through{' '}
+          <b>interactive demos</b>. You can click in any of the simulations and
+          draw new live cells. If you draw over living cells, you erase them.
+          You can control the simulations through the buttons on the left. Have
+          fun!
         </p>
 
         <h2>1. Rules of life</h2>

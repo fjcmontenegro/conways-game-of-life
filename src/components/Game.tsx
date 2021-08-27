@@ -9,6 +9,7 @@ type Props = {
 
 const Game = ({ playOnMount = false, ...props }: Props) => {
   const [isPlaying, setIsPlaying] = useState(playOnMount)
+  const [canvasId, setCanvasId] = useState(new Date().getTime())
 
   return (
     <div className="Game">
@@ -16,8 +17,14 @@ const Game = ({ playOnMount = false, ...props }: Props) => {
         <button onClick={() => setIsPlaying((playing) => !playing)}>
           {isPlaying ? 'Pause' : 'Play'}
         </button>
+        <button
+          className="reset-button"
+          onClick={() => setCanvasId(new Date().getTime())}
+        >
+          Reset
+        </button>
       </div>
-      <Canvas isPlaying={isPlaying} {...props} />
+      <Canvas key={canvasId} isPlaying={isPlaying} {...props} />
     </div>
   )
 }
